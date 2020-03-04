@@ -1,0 +1,11 @@
+name: capstone
+
+dependencies:
+  - python=3.5
+  - flask
+  - pip
+  - pip:
+    - flask-bootstrap
+    - flask-moment
+    - flask-wtf
+    - wtforms
