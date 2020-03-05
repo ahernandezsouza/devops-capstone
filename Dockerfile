@@ -1,21 +1,44 @@
-FROM python:3.6-alpine
+FROM debian:latest
 
-ENV FLASK_APP flasky.py
-ENV FLASK_CONFIG production
+RUN apt-get -qq update && apt-get -qq -y install curl bzip2 \
+  && curl -sSL https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -o /tmp/miniconda.sh \
+  && bash /tmp/miniconda.sh -bfp /usr/local \
+  && rm -rf /tmp/miniconda.sh \
+  && conda install -y python=3 \
+  && conda update conda \
+  && apt-get -qq -y install make \
+  && apt-get -qq -y remove curl bzip2 \
+  && apt-get -qq -y autoremove \
+  && apt-get autoclean \
+  && rm -rf /var/lib/apt/lists/* /var/log/dpkg.log \
+  && conda clean --all --yes
 
-RUN adduser -D flasky
-USER flasky
+ENV PATH /opt/conda/bin:$PATH
 
-WORKDIR /home/flasky
+## Step 1:
+RUN mkdir capstone
 
-COPY requirements requirements
-RUN python -m venv venv
-RUN venv/bin/pip install -r requirements/docker.txt
+## Step 2:
+COPY . /capstone
 
-COPY app app
-COPY migrations migrations
-COPY flasky.py config.py boot.sh ./
+## Step 3:
+# Install packages from requirements.txt
+WORKDIR /capstone
 
-# run-time configuration
-EXPOSE 5000
-ENTRYPOINT ["./boot.sh"]
+# Make RUN commands use the new environment:
+
+RUN make setup
+
+SHELL ["conda", "run", "-n", "capstone", "/bin/bash", "-c"]
+
+# Make sure the environment is activated:
+RUN echo "Make sure flask is installed:"
+RUN python -c "import flask"
+
+## Step 4:
+# Expose port 80
+EXPOSE 80/tcp
+
+## Step 5:
+# Run run_flask.sh at container launch
+ENTRYPOINT ["conda", "run", "-n", "capstone", "python", "hello.py"]
