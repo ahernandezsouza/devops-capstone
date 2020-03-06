@@ -1,12 +1,18 @@
 FROM debian:stretch
 
-RUN apt-get -qq update && apt-get -qq -y --no-install-recommends install curl=7.47.0 bzip2=1.0.6 \
+ENV CURL_CA_BUNDLE /etc/ssl/certs/ca-certificates.crt
+ENV CAPATH /etc/ssl/certs/
+ENV CACERT /etc/ssl/certs/ca-certificates.crt
+
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+
+RUN apt-get -qq update && apt-get -qq -y --no-install-recommends install ca-certificates=20161130+nmu1+deb9u1 curl=7.52.1-5+deb9u10 bzip2=1.0.6-8.1 \
   && curl -sSL https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -o /tmp/miniconda.sh \
   && bash /tmp/miniconda.sh -bfp /usr/local \
   && rm -rf /tmp/miniconda.sh \
   && conda install -y python=3 \
   && conda update conda \
-  && apt-get -qq -y --no-install-recommends install make=4.1 \
+  && apt-get -qq -y --no-install-recommends install make=4.1-9.1 \
   && apt-get -qq -y remove curl bzip2 \
   && apt-get -qq -y autoremove \
   && apt-get autoclean \
