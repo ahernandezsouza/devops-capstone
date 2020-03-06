@@ -1,12 +1,12 @@
-FROM debian:latest
+FROM debian:stretch
 
-RUN apt-get -qq update && apt-get -qq -y install curl bzip2 \
+RUN apt-get -qq update && apt-get -qq -y --no-install-recommends install curl=7.47.0 bzip2=1.0.6 \
   && curl -sSL https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -o /tmp/miniconda.sh \
   && bash /tmp/miniconda.sh -bfp /usr/local \
   && rm -rf /tmp/miniconda.sh \
   && conda install -y python=3 \
   && conda update conda \
-  && apt-get -qq -y install make \
+  && apt-get -qq -y --no-install-recommends install make=4.1 \
   && apt-get -qq -y remove curl bzip2 \
   && apt-get -qq -y autoremove \
   && apt-get autoclean \
@@ -30,10 +30,6 @@ WORKDIR /capstone
 RUN make setup
 
 SHELL ["conda", "run", "-n", "capstone", "/bin/bash", "-c"]
-
-# Make sure the environment is activated:
-RUN echo "Make sure flask is installed:"
-RUN python -c "import flask"
 
 ## Step 4:
 # Expose port 80
