@@ -9,7 +9,7 @@ executors:
       - image: hadolint/hadolint:<<parameters.tag>>
 jobs:
   dockerfile_lint:
-    executor: hadolint_executor
+    executor: hadolint
     steps:
       - run_dockerfile_lint
   build:
@@ -19,6 +19,6 @@ jobs:
       - checkout
     # run lint!
       - run:
-          name: run lint
+          name: run_dockerfile_lint
           command: |
             make lint
