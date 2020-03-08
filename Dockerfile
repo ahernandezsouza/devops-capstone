@@ -39,8 +39,8 @@ SHELL ["conda", "run", "-n", "capstone", "/bin/bash", "-c"]
 
 ## Step 4:
 # Expose port 80
-EXPOSE 80/tcp
+EXPOSE 5000/tcp
 
 ## Step 5:
 # Run run_flask.sh at container launch
-ENTRYPOINT ["conda", "run", "-n", "capstone", "python", "hello.py"]
+ENTRYPOINT ["conda", "run", "-n", "capstone", "python3", "hello.py"]

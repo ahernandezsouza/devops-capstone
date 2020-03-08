@@ -10,4 +10,4 @@ docker build /home/jjahs/projects/devops/devops-capstone -t jjahs/capstone:lates
 docker image ls jjahs/capstone:latest
 # Step 3:
 # Run flask app
-docker run -p 8000:80 jjahs/capstone:latest
+docker run -p 8000:5000 jjahs/capstone:latest
