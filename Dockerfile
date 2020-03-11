@@ -4,6 +4,7 @@ ENV CURL_CA_BUNDLE /etc/ssl/certs/ca-certificates.crt
 ENV CAPATH /etc/ssl/certs/
 ENV CACERT /etc/ssl/certs/ca-certificates.crt
 
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
 RUN apt-get -qq update && apt-get -qq -y --no-install-recommends install ca-certificates=20161130+nmu1+deb9u1 curl=7.52.1-5+deb9u10 bzip2=1.0.6-8.1 \
