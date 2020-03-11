@@ -1,14 +1,12 @@
 version: 2.1
 jobs:
-  I-Have-Code:
+  build:
     docker:
       - image: alpine:3.7
     steps:
       - checkout
       - run:
-          #https://github.com/ahernandezsouza/devops-capstone
-          name: Pull Code
+          name: Code Has Arrived
           command: |
             ls -al
             echo '^^^That should look familiar^^^'
-            make
