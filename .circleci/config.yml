@@ -13,5 +13,5 @@ jobs:
       - run:
           name: Lint
           command: |
-            apt-get install build-essential
+            apt-get install make
             make lint
