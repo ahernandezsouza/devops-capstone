@@ -10,3 +10,7 @@ jobs:
           command: |
             ls -al
             echo '^^^That should look familiar^^^'
+      - run:
+          name: Lint
+          command: |
+            make lint
