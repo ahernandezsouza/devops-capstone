@@ -1,24 +1,29 @@
-version: 2
-executors:
-  hadolint_executor:
-    parameters:
-      tag:
-        type: string
-        default: "v1.6.6-6-g254b4ff"
-    docker:
-      - image: hadolint/hadolint:<<parameters.tag>>
+version: 2.1
 jobs:
-  dockerfile_lint:
-    executor: hadolint
-    steps:
-      - run_dockerfile_lint
   build:
     docker:
-      - image: jjahs/capstone:latest
+      - image: ubuntu:xenial-20200212
     steps:
       - checkout
-    # run lint!
       - run:
-          name: run_dockerfile_lint
+          name: Code Has Arrived
           command: |
+            ls -al
+            echo '^^^That should look familiar^^^'
+      - run:
+          name: Lint
+          command: |
+            apt-get update
+            apt-get install -y software-properties-common
+            apt-get install -y apt-transport-https ca-certificates
+            apt-get update
+            apt-get install make
+            # apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+            # apt-add-repository 'deb https://apt.dockerproject.org/repo ubuntu-xenial main'
+            # apt-get update
+            # apt-get install -y docker-engine
+            # Install hadolint
+            apt-get install -y wget
+            wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
+              chmod +x /bin/hadolint
             make lint
