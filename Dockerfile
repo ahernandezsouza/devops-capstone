@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM python:3.7.3-stretch
 
 ENV CURL_CA_BUNDLE /etc/ssl/certs/ca-certificates.crt
 ENV CAPATH /etc/ssl/certs/
