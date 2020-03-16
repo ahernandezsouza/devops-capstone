@@ -17,6 +17,7 @@ jobs:
             apt-get install -y software-properties-common
             apt-get install -y apt-transport-https ca-certificates
             apt-get update
+            pip install pylint --upgrade
             apt-get install make
             apt-get install -y wget
             wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
