@@ -1,3 +1,4 @@
+SHELL=/bin/bash
 setup:
 	# #
 	./setup.sh
@@ -5,6 +6,7 @@ setup:
 lint:
 	# See local hadolint install instructions:   https://github.com/hadolint/hadolint
 	# This is linter for Dockerfiles
+	source activate capstone
 	#docker run --rm -i hadolint/hadolint < Dockerfile
 	hadolint Dockerfile
 	# This is a linter for Python source code linter: https://www.pylint.org/
