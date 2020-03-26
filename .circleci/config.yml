@@ -6,20 +6,24 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Code Has Arrived
+          name: Setup
           command: |
             ls -al
             echo '^^^That should look familiar^^^'
-      - run:
-          name: Lint
-          command: |
             apt-get update
             apt-get install -y software-properties-common
             apt-get install -y apt-transport-https ca-certificates
             apt-get update
-            pip install pylint --upgrade
             apt-get install make
             apt-get install -y wget
             wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
               chmod +x /bin/hadolint
+            wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O $HOME/miniconda.sh
+            chmod 0755 $HOME/miniconda.sh
+            $HOME/miniconda.sh -b -p $HOME/conda
+            ./setup.sh
+
+      - run:
+          name: Lint
+          command: |
             make lint
