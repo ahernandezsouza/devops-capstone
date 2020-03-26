@@ -20,6 +20,7 @@ jobs:
               chmod +x /bin/hadolint
             ./setup.sh
             pip install pylint
+            source activate capstone
       - run:
           name: Lint
           command: |
