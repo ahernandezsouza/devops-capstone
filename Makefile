@@ -9,4 +9,8 @@ lint:
 	# This is linter for Dockerfiles
 	hadolint Dockerfile
 
-all: setup lint
+container:
+	# Build Image
+	./run_docker.sh
+
+all: setup lint container

@@ -25,3 +25,7 @@ jobs:
           command: |
             source activate capstone
             make lint
+      - run:
+          name: Container
+          command: |
+            make container
