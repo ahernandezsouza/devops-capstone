@@ -18,7 +18,7 @@ jobs:
             apt-get install -y wget
             wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
               chmod +x /bin/hadolint
-            apt-get install -y curl
+            apt-get install -y gnupg
             apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
             apt-add-repository 'deb https://apt.dockerproject.org/repo ubuntu-xenial main'
             apt-get update
