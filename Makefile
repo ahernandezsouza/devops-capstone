@@ -6,7 +6,7 @@ setup:
 lint:
 	# See local hadolint install instructions:   https://github.com/hadolint/hadolint
 	# This is linter for Dockerfiles
-	./lint.sh
+	#./lint.sh
 	# source activate capstone
 	#docker run --rm -i hadolint/hadolint < Dockerfile
 	hadolint Dockerfile

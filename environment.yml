@@ -26,6 +26,7 @@ dependencies:
   - xz=5.2.4=h14c3975_4
   - zlib=1.2.11=h7b6447c_3
   - pip:
+    - pylint==2.4.4
     - flask
     - dominate==2.4.0
     - flask-bootstrap==3.3.7.1
