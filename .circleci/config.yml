@@ -27,6 +27,8 @@ jobs:
               bionic \
               stable"
             apt-get update
+            apt-get update
+            add-apt-repository ppa:ubuntu-sdk-team/ppa
             apt-get install -y docker-ce docker-ce-cli containerd.io
             ./setup.sh
             pip install pylint
