@@ -18,6 +18,8 @@ jobs:
             apt-get install -y wget
             wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
               chmod +x /bin/hadolint
+            apt install curl
+            curl -fsSL get.docker.com -o get-docker.sh && sh get-docker.sh
             ./setup.sh
             pip install pylint
       - run:
