@@ -31,11 +31,10 @@ jobs:
             source activate capstone
             make lint
 workflows:
-  commit:
+  "Build and Lint":
     jobs:
       - build-and-lint
   build-docker-image-only:
     jobs:
       - docker/publish:
-          deploy: false
-          image: jjahs/capstone
+          image: jjahs/capstone:latest
