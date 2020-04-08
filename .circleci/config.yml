@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  hello: circleci/hello-build@0.0.1
 jobs:
   build:
     docker:
@@ -21,14 +23,6 @@ jobs:
             apt-get install -y \
               curl \
               gnupg-agent \
-              libseccomp2
-            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-            add-apt-repository \
-              "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-              xenial \
-              stable"
-            apt-get update
-            apt-get install -y docker-ce docker-ce-cli containerd.io
             ./setup.sh
             pip install pylint
       - run:
