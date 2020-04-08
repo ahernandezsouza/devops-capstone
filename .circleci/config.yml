@@ -32,6 +32,7 @@ jobs:
             make lint
 
       - setup_remote_docker
+      - docker/install-docker-tools
       # build and push Docker image
       - run: |
           TAG=0.1.$CIRCLE_BUILD_NUM
