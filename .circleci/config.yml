@@ -34,7 +34,9 @@ workflows:
   "Build and Lint":
     jobs:
       - build-and-lint
-  build-docker-image-only:
-    jobs:
+      - run:
+          name: Login to Dockerhub
+          command: |
+            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
       - docker/publish:
           image: jjahs/capstone:latest
