@@ -22,7 +22,8 @@ jobs:
               chmod +x /bin/hadolint
             apt-get install -y \
               curl \
-              gnupg-agent \
+              gnupg-agent
+            ./setup.sh
             pip install pylint
       - run:
           name: Lint
