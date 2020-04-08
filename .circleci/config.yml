@@ -30,10 +30,21 @@ jobs:
           command: |
             source activate capstone
             make lint
-      - docker/install-docker-tools
+  build-and-push:
+    executor: docker/docker
+    steps:
+      - setup_remote_docker
+      - docker/check
+      - docker/build:
+          image: jjahs/capstone:latest
       - run:
           name: Login to Dockerhub
           command: |
             echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-      - docker/publish:
+      - docker/push:
           image: jjahs/capstone:latest
+workflows:
+  setup:
+    jobs:
+      - build-and-lint
+      - build-and-push
