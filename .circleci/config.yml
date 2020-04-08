@@ -34,3 +34,8 @@ workflows:
   commit:
     jobs:
       - build-and-lint
+  build-docker-image-only:
+    jobs:
+      - docker/publish:
+          deploy: false
+          image: jjahs/capstone
