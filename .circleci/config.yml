@@ -30,10 +30,7 @@ jobs:
           command: |
             source activate capstone
             make lint
-workflows:
-  "Build and Lint":
-    jobs:
-      - build-and-lint
+      - docker/install-docker-tools
       - run:
           name: Login to Dockerhub
           command: |
