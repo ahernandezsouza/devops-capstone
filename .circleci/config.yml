@@ -2,13 +2,13 @@ version: 2.1
 orbs:
   docker: circleci/docker@1.0.1
 jobs:
-  build:
+  build-and-lint:
     docker:
       - image: continuumio/miniconda3
     steps:
       - checkout
       - run:
-          name: Setup
+          name: Build
           command: |
             ls -al
             echo '^^^That should look familiar^^^'
@@ -30,3 +30,7 @@ jobs:
           command: |
             source activate capstone
             make lint
+workflows:
+  commit:
+    jobs:
+      - build-and-lint
