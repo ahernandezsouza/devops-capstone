@@ -30,23 +30,34 @@ jobs:
           command: |
             source activate capstone
             make lint
-  build-and-push:
-    machine: true
-    steps:
+
+      - setup_remote_docker:
+          docker_layer_caching: true
+
+      # build and push Docker image
+      - run: |
+          TAG=0.1.$CIRCLE_BUILD_NUM
+          docker build -t jjahs/capstone:$TAG .
+          echo "$DOCKERHUB_PASS" | docker login --username $DOCKERHUB_USERNAME --password-stdin
+          docker push jjahs/capstone:$TAG
+
+  #build-and-push:
+    #machine: true
+    #steps:
       # start proprietary DB using private Docker image
       # with credentials stored in the UI
-      - run: |
-          echo "$DOCKERHUB_PASS" | docker login --username $DOCKERHUB_USERNAME --password-stdin
+      #- run: |
+      #    echo "$DOCKERHUB_PASS" | docker login --username $DOCKERHUB_USERNAME --password-stdin
 
       # build the application image
-      - run: docker build -f /home/circleci/project/Dockerfile /home/circleci/project -t jjahs/capstone:latest
+      #- run: docker build -f /home/circleci/project/Dockerfile /home/circleci/project -t jjahs/capstone:latest
 
       # deploy the image
-      - run: docker push jjahs/capstone:latest
+      #- run: docker push jjahs/capstone:latest
 workflows:
   setup:
     jobs:
       - build-and-lint
-      - build-and-push:
-          requires:
-            - build-and-lint
+      #- build-and-push:
+      #    requires:
+      #      - build-and-lint
