@@ -31,18 +31,18 @@ jobs:
             source activate capstone
             make lint
   build-and-push:
-    executor: docker/docker
+    machine: true
     steps:
-      - setup_remote_docker
-      - docker/check
-      - docker/build:
-          image: jjahs/capstone:latest
-      - run:
-          name: Login to Dockerhub
-          command: |
-            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-      - docker/push:
-          image: jjahs/capstone:latest
+      # start proprietary DB using private Docker image
+      # with credentials stored in the UI
+      - run: |
+          echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
+
+      # build the application image
+      - run: docker build -t company/app:latest
+
+      # deploy the image
+      - run: docker push jjahs/capstone:latest
 workflows:
   setup:
     jobs:
