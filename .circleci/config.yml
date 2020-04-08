@@ -39,7 +39,7 @@ jobs:
           echo "$DOCKERHUB_PASS" | docker login --username $DOCKERHUB_USERNAME --password-stdin
 
       # build the application image
-      - run: docker build -t company/app:latest
+      - run: docker build -t jjahs/capstone
 
       # deploy the image
       - run: docker push jjahs/capstone:latest
