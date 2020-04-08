@@ -23,7 +23,6 @@ jobs:
             apt-get install -y \
               curl \
               gnupg-agent \
-            ./setup.sh
             pip install pylint
       - run:
           name: Lint
