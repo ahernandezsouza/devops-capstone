@@ -1,0 +1,65 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello
+  namespace: default
+  labels:
+    app: hello
+spec:
+  ports:
+    - port: 80
+  selector:
+    app: hello
+    tier: frontend
+  type: LoadBalancer
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wp-pv-claim
+  namespace: default
+  labels:
+    app: hello
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello
+  namespace: default
+  labels:
+    app: hello
+spec:
+  selector:
+    matchLabels:
+      app: hello
+      tier: frontend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: hello
+        tier: frontend
+    spec:
+      containers:
+      - image: jjahs/capstone:0.1.104
+        name: hello
+        ports:
+        - containerPort: 80
+          name: hello
+        volumeMounts:
+        - name: wordpress-persistent-storage
+          mountPath: /var/www/html
+      volumes:
+      - name: wordpress-persistent-storage
+        persistentVolumeClaim:
+          claimName: wp-pv-claim
