@@ -29,3 +29,7 @@ This repository contains:
 ### Successful Deployment
 
 5. The application is deployed using both Cloudformation and Ansible, using the tools set up in the eks folder.
+
+6. Setup in EKS, Rolling deployment set up!
+
+![Picture 2](http://udacity-website-jjahs.s3-website-us-east-1.amazonaws.com/img/Picture3.jpg)

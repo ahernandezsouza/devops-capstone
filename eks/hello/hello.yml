@@ -1,65 +1,45 @@
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: hello
-  namespace: default
-  labels:
-    app: hello
-spec:
-  ports:
-    - port: 80
-  selector:
-    app: hello
-    tier: frontend
-  type: LoadBalancer
+- hosts: localhost
+  gather_facts: false
 
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: wp-pv-claim
-  namespace: default
-  labels:
-    app: hello
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 20Gi
+  vars_files:
+    - vars/main.yml
 
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: hello
-  namespace: default
-  labels:
-    app: hello
-spec:
-  selector:
-    matchLabels:
-      app: hello
-      tier: frontend
-  strategy:
-    type: Recreate
-  template:
-    metadata:
-      labels:
-        app: hello
-        tier: frontend
-    spec:
-      containers:
-      - image: jjahs/capstone:0.1.104
-        name: hello
-        ports:
-        - containerPort: 80
-          name: hello
-        volumeMounts:
-        - name: wordpress-persistent-storage
-          mountPath: /var/www/html
-      volumes:
-      - name: wordpress-persistent-storage
-        persistentVolumeClaim:
-          claimName: wp-pv-claim
+  tasks:
+    - name: Deploy Hello.
+      k8s:
+        definition: '{{ item }}'
+        kubeconfig: '{{ k8s_kubeconfig }}'
+        state: present
+      loop:
+        - "{{ lookup('template', 'hello/hello.yml') | from_yaml_all | list }}"
+
+    - name: Get load balancer DNS name.
+      k8s_info:
+        kubeconfig: '{{ k8s_kubeconfig }}'
+        kind: Service
+        name: service-hello
+        namespace: default
+      register: hello_svc
+
+    - name: Set the load balancer URL as a fact.
+      set_fact:
+        hello_lb_host: "{{ hello_svc['resources'][0]['status']['loadBalancer']['ingress'][0]['hostname'] }}"
+      when: aws_environment | bool
+
+    - name: Wait for Load Balancer to respond.
+      uri:
+        url: "http://{{ hello_lb_host }}"
+      register: lb_result
+      until: lb_result.status == 200
+      retries: 60
+      delay: 5
+      when: aws_environment | bool
+
+    - name: Get ELB info.
+      ec2_elb_info:
+        region: "{{ aws_region }}"
+        profile: "{{ aws_profile }}"
+        names: "{{ hello_lb_host.split('-')[0] }}"
+      register: elb_info
+      when: aws_environment | bool
